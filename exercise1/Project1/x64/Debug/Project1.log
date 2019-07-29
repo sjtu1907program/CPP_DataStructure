@@ -1,0 +1,3 @@
+﻿  main.cpp
+h:\git\cpp_datastructure\exercise1\project1\main.cpp(27): warning C4244: “return”: 从“__int64”转换到“int”，可能丢失数据
+  Project1.vcxproj -> H:\Git\CPP_DataStructure\exercise1\x64\Debug\exercise.exe
