@@ -1,13 +1,13 @@
-This is a homework hub for 1907 programing class.
+This is a homework hub for 1907 programing class.  
+  
+wxr           --吴幸融  
+Xyy           --许宇阳  
+lsn           --刘舒楠  
+zl             --张磊  
+Liu_Zhengdong --刘振东  
+hhy           --胡浩宇  
+wth           --吴天昊  
+wyc            --吴悦城  
+hcr            --黄超然  
+hj             --侯杰
 
-MilkyW        --吴幸融
-Xyy1997       --许宇阳
-Asuna-NanShi  --刘舒楠
-SeeeexyPi     --张磊
-boosLiu       --刘振东
-qq812017077   --胡浩宇
-Ghost-wu      --吴天昊
-SinDragger    --吴悦城
-Decappoolla   --黄超然
-jayhou07      --侯杰
-jjdlnm        --刘佳梦
