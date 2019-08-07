@@ -1,4 +1,7 @@
 #include <iostream>
+#include "DbLnkList.h"
+
+#define LENGTHOF(x) (sizeof(x)/sizeof(x[0]))
 
 using namespace std;
 
@@ -13,14 +16,19 @@ void test(int num) {
 		cout << num << " -> " << result << endl;
 	}
 }
+void listTest() {
+	int test[] = { 5,3,9,2,7,2,6};
+	DbLinkList testList{ test, LENGTHOF(test) };
+	cout << testList << endl;
+	testList.erase(9);
+	cout << testList << endl;
+	testList.insert(testList.find(7),3);
+	cout << testList << endl;
+}
+
 
 int main() {
-	test(123);
-	test(-1234);
-	test(123456789);
-	test(-123456789);
-	test(1234567899);
-	test(-1234567899);
+	listTest();
 	system("pause");
 }
 
