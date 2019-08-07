@@ -18,6 +18,14 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="exercise.cpp" />
+    <ClCompile Include="matrix33.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LinkList.h" />
+    <ClInclude Include="matrix33.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{965CBB5C-4CBB-4A55-A318-3CEF28DEB938}</ProjectGuid>
