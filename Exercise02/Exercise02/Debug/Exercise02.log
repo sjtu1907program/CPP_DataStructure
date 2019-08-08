@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Users\unity\source\repos\DSAlgoCPP\Exercise02\Exercise02\LinkList.h(38): warning C4172:  返回局部变量或临时变量的地址
+  Exercise02.vcxproj -> C:\Users\unity\source\repos\DSAlgoCPP\Exercise02\Debug\Exercise02.exe
