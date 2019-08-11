@@ -1,5 +1,23 @@
 #include "LinkList.h"
 
+LinkList::LinkList(std::initializer_list<int> l)
+	:size(int(l.size())), head(nullptr)
+{
+	ListNode* prev = nullptr;
+	ListNode* now = nullptr;
+	if (size) { //if not empty vector
+		head = new ListNode(*l.begin()); //do the head
+		prev = head; //the first prev is head
+	}
+	auto ite = l.begin();
+	for (int i = 1; i < size; i++) { //do the body
+		ite++;
+		now = new ListNode(*ite); //add the now Node
+		prev->setNext(now); //chain now to prev
+		prev = now; //prev pointer points to now
+	}
+}
+
 LinkList::LinkList(const vector<int>& v) //create a List from a vector
 	: size(int(v.size())), head(nullptr) //default: empty List
 {
@@ -16,7 +34,6 @@ LinkList::LinkList(const vector<int>& v) //create a List from a vector
 	}
 }
 
-
 LinkList::LinkList(int* array, int array_size) //create a List from an array
 	: size(array_size), head(nullptr) //default: empty List
 {
@@ -31,6 +48,72 @@ LinkList::LinkList(int* array, int array_size) //create a List from an array
 		prev->setNext(now); //chain now to prev 
 		prev = now; //prev pointer points to now
 	}
+}
+
+LinkList::LinkList(const LinkList& another) {
+	//another is an empty List
+	if (another.size == 0) {
+		*this = LinkList();
+		return;
+	}
+	ListNode* nowA = another.head; //the headA is the first nowA
+	head = new ListNode(another.head->getValue()); //create a head with the value
+	ListNode* now = nullptr;
+	ListNode* prev = head; //the head is the first prev
+	nowA = nowA->getNext(); //get the next nowA
+	while (nowA != nullptr) { //until the end of another
+		now = new ListNode(nowA->getValue()); //copy the now Node
+		prev->setNext(now); //chain now to prev
+		prev = now; //the next prev is the now now
+		nowA = nowA->getNext(); //get the next nowA
+	}
+	size = another.size;
+	return; //get a new List
+}
+
+LinkList & LinkList::operator=(const LinkList & another)
+{
+	this->~LinkList(); //get rid of the old List
+	//is the same
+	if (head == another.head) {
+		return *this;
+	}
+	//another is an empty List
+	if (another.size == 0) {
+		*this = LinkList();
+		return *this;
+	}
+	ListNode* nowA = another.head; //the headA is the first nowA
+	head = new ListNode(another.head->getValue()); //create a head with the value
+	ListNode* now = nullptr;
+	ListNode* prev = head; //the head is the first prev
+	nowA = nowA->getNext(); //get the next nowA
+	while (nowA != nullptr) { //until the end of another
+		now = new ListNode(nowA->getValue()); //copy the now Node
+		prev->setNext(now); //chain now to prev
+		prev = now; //the next prev is the now now
+		nowA = nowA->getNext(); //get the next nowA
+	}
+	size = another.size;
+	return *this; //get a new List
+}
+
+LinkList::~LinkList() {
+	if (head == nullptr) {
+		return;
+	}
+	size = 0;
+	ListNode* now = head; //the first now is head
+	if (head) {
+		now = now->getNext();
+		delete head;
+	}
+	while (now != nullptr) {
+		ListNode* temp = now; //store where now is
+		now = now->getNext(); //get the next
+		delete temp; //delete the previous now
+	}
+	head = nullptr;
 }
 
 bool LinkList::insert(ListNode* np, int pos) { //insert value into pos of the List
