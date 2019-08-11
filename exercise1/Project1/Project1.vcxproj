@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="exercise.cpp" />
+    <ClCompile Include="LinkList.cpp" />
     <ClCompile Include="matrix33.cpp" />
   </ItemGroup>
   <ItemGroup>

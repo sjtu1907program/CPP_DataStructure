@@ -21,6 +21,9 @@
     <ClCompile Include="matrix33.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LinkList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix33.h">
