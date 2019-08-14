@@ -6,13 +6,19 @@
 using namespace std;
 
 void listTest() {
-	int test[] = { 5,3,9,2,7,2,6};
-	DbLinkList testList{ test, LENGTHOF(test) };
-	cout << testList << endl;
-	testList.erase(9);
-	cout << testList << endl;
-	testList.insert(testList.find(7),3);
-	cout << testList << endl;
+	myClassLibrary::DbLinkList testList{ {1,3,5,6,3} };
+	myClassLibrary::DbLinkList another{ testList };
+	myClassLibrary::DbLinkList another2;
+	cout <<"testList:" << testList << endl;
+	cout <<"another2:" << another2 << endl;
+	testList.erase(5);
+	cout <<"testList:" << testList << endl;
+	testList.insert(testList.find(3),3);
+	cout << "testList:"<< testList << endl;
+	cout << "another:" << another << endl;
+	cout << "another2:" << another2 << endl;
+	another2 = testList;
+	cout << "½«testList¸³¸øanother2ºó:"<<another2 << endl;
 }
 
 int main() {

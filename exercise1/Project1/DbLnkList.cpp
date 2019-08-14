@@ -79,9 +79,6 @@ DbListNode* DbLinkList::find(int x) {
 	return curNode;
 }
 
-void DbLinkList::sort() {
-	 
-}
 
 std::ostream& operator<<(std::ostream& _cout,const DbLinkList& list) {
 	
