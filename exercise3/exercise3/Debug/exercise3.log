@@ -1,0 +1,7 @@
+﻿  SweepingBombs.cpp
+c:\users\admin\desktop\unity quan\gitcategroy\cpp_datastructure\exercise3\exercise3\sweepingbombs.cpp(34): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\admin\desktop\unity quan\gitcategroy\cpp_datastructure\exercise3\exercise3\sweepingbombs.cpp(35): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\admin\desktop\unity quan\gitcategroy\cpp_datastructure\exercise3\exercise3\sweepingbombs.cpp(63): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\admin\desktop\unity quan\gitcategroy\cpp_datastructure\exercise3\exercise3\sweepingbombs.cpp(103): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\admin\desktop\unity quan\gitcategroy\cpp_datastructure\exercise3\exercise3\sweepingbombs.cpp(128): warning C4018: “>=”: 有符号/无符号不匹配
+  exercise3.vcxproj -> C:\Users\admin\Desktop\UNITY QUAN\gitCategroy\CPP_DataStructure\exercise3\Debug\exercise3.exe
