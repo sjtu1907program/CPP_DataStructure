@@ -1,12 +1,22 @@
 #include <iostream>
 #include <vector>
 #include "MineSweeper.h"
+
 using namespace std;
 
+
+
 void GetInput(int16_t & rows, int16_t & cols, int16_t & mode, int16_t & bombs);
+void MineSweeperTest();
 
 int main(void)
 {
+	
+	MineSweeperTest();
+	system("pause");
+}
+
+void MineSweeperTest() {
 	int16_t rows{ 5 }, cols{ 5 };
 	int16_t mode{ 2 };
 	int16_t bombs{ 0 };
@@ -15,7 +25,7 @@ int main(void)
 	MineSweeper * ms = nullptr;
 	ms = new MineSweeper(rows, cols, Mode::HARD);
 	ms->print();
-	
+
 	if (mode == 5)
 	{
 		ms = new MineSweeper(rows, cols, bombs);
@@ -36,23 +46,21 @@ int main(void)
 			break;
 		}
 	}
-	
+
 	int x, y;
 	cout << "Input x and y:";
 	while (((cin >> x) && (cin >> y))) {
 		if (x == -1 && y == -1) ms->show();
 		else {
 			bool error = !ms->play(x, y);
-			if(error)
-				cout << "input error. input x and y again:"<< endl;
+			if (error)
+				cout << "input error. input x and y again:" << endl;
 		}
 		if (ms->checkOver()) break;
 		cout << "Input x and y:";
 	}
 	cout << "game over!" << endl;
-	system("pause");
 }
-
 
 void GetInput(int16_t & rows, int16_t & cols, int16_t & mode, int16_t & bombs) {
 	cout << "please input rows and cols of map(rows:>3 and cols:>3):" << endl;

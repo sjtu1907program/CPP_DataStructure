@@ -4,11 +4,15 @@
 #include <math.h>
 #include <time.h>
 
+
+
+/* 雷区的生成，*/
 void MineSweeper::createMap(int _rows, int _cols) {
 	if (_rows <= 3 || _cols <= 3)
-		throw "rows or cols is too small";
-	m_grid = vector<vector<int>>(_rows,vector<int>(_cols, SAFE_CELL));
-	m_status = vector<vector<bool>>(_rows,vector<bool>(_cols,false));
+		throw "m_rows or m_cols is too small";
+	m_grid = vector<vector<int>>(_rows + 2,vector<int>(_cols + 2, SAFE_CELL));
+	m_status = vector<vector<bool>>(_rows + 2,vector<bool>(_cols + 2,false));
+	//在实际的雷区外周扩展一圈空白区，方便之后的计算
 }
 
 MineSweeper::MineSweeper(int _rows, int _cols) {
@@ -19,33 +23,33 @@ MineSweeper::MineSweeper(int _rows, int _cols, Mode mode) {
 	//雷的数量与地图有关
 	switch (mode) {
 	case Mode::EASY:
-		mines = (_rows * _cols) / 16;
+		m_mines = (_rows * _cols) / 16;
 		break;
 	case Mode::NORMAL:
-		mines = (_rows * _cols) / 8;
+		m_mines = (_rows * _cols) / 8;
 		break;
 	case Mode::HARD:
-		mines = (_rows * _cols) / 6;
+		m_mines = (_rows * _cols) / 6;
 		break;
 	case Mode::CRAZY:
-		mines = (_rows * _cols) / 4;
+		m_mines = (_rows * _cols) / 4;
 		break;
 	default:
-		mines = _rows + _cols;
+		m_mines = _rows + _cols;
 		break;
 	}
-	new (this)MineSweeper(_rows,_cols,mines);
+	new (this)MineSweeper(_rows,_cols, m_mines);
 
 }
 MineSweeper::MineSweeper(int _rows, int _cols, int _mines) {
-	rows = _rows;
-	cols = _cols;
-	mines = _mines;
-	gameover = false;
-	safeCells = rows * cols - mines;
+	m_rows = _rows;
+	m_cols = _cols;
+	m_mines = _mines;
+	m_gameover = false;
+	m_safeCells = m_rows * m_cols - m_mines;
 	//生成初始地图
-	createMap(rows, cols);
-	foundedSafeCounts = 0;
+	createMap(m_rows, m_cols);
+	m_foundedSafeCounts = 0;
 	shuffle(); //洗牌，生成随机位置的地雷
 	envValConfig();	//根据地雷配置其他cell的内容
 }
@@ -55,11 +59,11 @@ MineSweeper::~MineSweeper(void) {
 
 }
 
+//打开制定的位置
 bool MineSweeper::play(int x, int y) {
-	if (x <0  || x > cols) return false;
-	if (y < 0 || y > rows) return false;
+	if (x <= 0  || x > m_cols) return false;
+	if (y <= 0 || y > m_rows) return false;
 	bool result = true;
-	x--, y--;
 	if (m_status[x][y]) {
 		cout << "this cell has been open!" << endl;
 		return true;
@@ -67,13 +71,18 @@ bool MineSweeper::play(int x, int y) {
 	m_status[x][y] = true;
 	int val = m_grid[x][y];
 	if (val == MINE_CELL) {
-		gameover = true;
-		cout << "You failed!" << endl;
+		if (0 == m_foundedSafeCounts) {
+			val = swapMine(x, y);	//更新值
+		}
+		else {
+			m_gameover = true;
+			cout << "You failed!" << endl;
+		}
 	}
-	else {
+	if (!m_gameover) {
 		//不是雷，则更新计数。
-		foundedSafeCounts++;
-		if (val == SAFE_CELL) {//若不是雷，且周边没有雷，则需对周边进行展开
+		m_foundedSafeCounts++;
+		if (val == SAFE_CELL) {//若不是雷，且周边没有雷。则需对其进行unfold操作
 			unfold(x, y);
 		}
 	}
@@ -82,9 +91,9 @@ bool MineSweeper::play(int x, int y) {
 }
 
 void MineSweeper::show() {
-	for (int i = 0; i < rows; ++i)
+	for (int i = 1; i <= m_rows; ++i)
 	{
-		for (int j = 0; j < cols; ++j) {
+		for (int j = 1; j <= m_cols; ++j) {
 			int tmp = m_grid[i][j];
 			if (tmp == MINE_CELL) {
 				cout << "!  ";
@@ -98,44 +107,48 @@ void MineSweeper::show() {
 }
 //打印地图
 void MineSweeper::print() {
-	for (int i = 0; i < rows; ++i)
+	for (int i = 0; i <= m_rows; ++i)
 	{
-		for (int j = 0; j < cols; ++j) {
-			if (m_status[i][j]) {
+		for (int j = 0; j <= m_cols; ++j) {
+			if (j==0) {
+				cout << i << "\t";
+			}
+			else if (i == 0) {
+				cout << j << "  ";
+			}
+			else if (m_status[i][j]) {
 				int tmp = m_grid[i][j];
 				if (tmp == MINE_CELL) {
-					cout << "!  ";
+					cout << "! ";
 				}
 				else {
 					cout << tmp << "  ";
 				}
 			}else{
-				cout << "@  ";
+					cout << "@  ";
 			}
 		}
-		cout << endl;
+		cout << endl ;
 	}
 }
 
 bool MineSweeper::checkOver() {
-	if (foundedSafeCounts == safeCells) {
-		gameover = true;
+	if (m_foundedSafeCounts == m_safeCells) {
+		m_gameover = true;
 		cout << "Win!!" << endl;
 	}
-	return gameover;
-}
-void MineSweeper::funcTest() {
-	
+	return m_gameover;
 }
 
-
-//洗牌
+/*
+	地雷的随机生成函数
+*/
 void MineSweeper::shuffle() {
-	int counts = mines;
-	srand(time(0) + rows * cols - counts);
+	int counts = m_mines;
+	srand(time(0));
 	while (counts) {
-		int i = rand() % rows ;
-		int j = rand() % cols ;
+		int i = rand() % m_rows +1;
+		int j = rand() % m_cols +1;
 		if (m_grid[i][j] == SAFE_CELL) {
 			m_grid[i][j] = MINE_CELL;
 			counts--;
@@ -144,49 +157,65 @@ void MineSweeper::shuffle() {
 }
 
 void MineSweeper::envValConfig() {
-	for (int i = 0; i < rows; ++i)
-		for (int j = 0; j < cols; ++j) {
+	for (int i = 1; i <= m_rows; ++i)
+		for (int j = 1; j <= m_cols; ++j) {
 			if (m_grid[i][j]== SAFE_CELL)
 				m_grid[i][j] = round(m_grid,i,j);
 		}
 }
 
+/*
+	round函数返回制定格子周围一圈内的地雷数量
+*/
 inline int MineSweeper::round(vector<vector<int>> & m_grid, int i, int j) {
-	int rows = m_grid.size(), cols = m_grid[0].size();//行和列
-	int result{0};
+	int m_rows = m_grid.size(), m_cols = m_grid[0].size();//行和列
+	int result{ 0 };
 	for (int x = -1; x <= 1; x++)
-		for (int y = -1; y <= 1; y++) {
-			int tmpx = i + x, tmpy = j + y;
-			if (tmpx >= 0 && tmpy >= 0 && tmpx < rows && tmpy < cols)
-				if (m_grid[tmpx][tmpy] == 9)
-					result++;
-		}
-	
+		for (int y = -1; y <= 1; y++)
+			result += (m_grid[i + x][j + y] == MINE_CELL) ? 1 : 0;
 	return result;
 }
 
+/*
+	unfold函数将状态为SAFE_CELL的格子四周的所有格子全部打开
+*/
 void MineSweeper::unfold(int i, int j) {
-	int initXoffset{ -1 }, initYoffset{-1};
-	int endXoffset{ 1 }, endYoffset{ 1 };
-	if (j == 0) initYoffset = 0;
-	else if (j == cols - 1) endYoffset = 0;
-	if (i == 0) initXoffset = 0;
-	else if (i == rows - 1) endXoffset = 0;
-	
-	for(int x = initXoffset ; x <= endXoffset ;x++)
-		for (int y = initYoffset; y <= endYoffset; y++) {
+	if (i <1 || i > m_rows || j <1 || j > m_cols) return;
+	if (m_grid[i][j] != SAFE_CELL) return;
+	for(int x = -1 ; x <=1 ; x++)
+		for (int y = -1; y <= 1; y++) {
 			if (x == 0 && y == 0) continue;	//跳过中心位置
 			int tmpx = i + x, tmpy = j + y;
-			if (!m_status[tmpx][tmpy] )
+			if (!m_status[tmpx][tmpy])
 			{
-				foundedSafeCounts++;
+				m_foundedSafeCounts++;
 				m_status[tmpx][tmpy] = true;
-				if(m_grid[tmpx][tmpy] == SAFE_CELL)
+				if (m_grid[tmpx][tmpy] == SAFE_CELL)
 					unfold(tmpx, tmpy);
 			}
-			
-			//cout << "当前已发现的safe cells：" << foundedSafeCounts << endl;
-
 		}
-		
 }
+
+/*
+ 如果第一个点开的就是雷，则对其进行一下交换，同时需要重新更新这两个位置四周的计数
+*/
+int  MineSweeper::swapMine(int x, int y) {
+	//寻找一个不是雷德cell
+	while (1) {
+		int i = rand() % m_rows + 1;
+		int j = rand() % m_cols + 1;
+		if (m_grid[i][j] != SAFE_CELL) {
+			int tmp = m_grid[i][j];
+			m_grid[i][j] = m_grid[x][y];
+			m_grid[x][y] = tmp;
+			for (int a = -1; a <= 1; a++)
+				for (int b = -1; b <= 1; b++) {
+					if (a == 0 && b == 0) continue;
+					m_grid[i+a][j+b] +=1;
+					m_grid[x+a][y+b] -=1;
+				}
+			return m_grid[x][y];
+		}
+	}
+}
+
