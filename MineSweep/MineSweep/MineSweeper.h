@@ -40,6 +40,6 @@ private :
 	void shuffle();
 	void envValConfig();
 	void unfold(int x , int y);
-	inline int round(vector<vector<int>> & m_grid, int i, int j);
+	inline int round(int i, int j);
 	int swapMine(int x, int y);
 };

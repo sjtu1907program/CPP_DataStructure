@@ -91,15 +91,23 @@ bool MineSweeper::play(int x, int y) {
 }
 
 void MineSweeper::show() {
-	for (int i = 1; i <= m_rows; ++i)
+	for (int i = 0; i <= m_rows; ++i)
 	{
-		for (int j = 1; j <= m_cols; ++j) {
-			int tmp = m_grid[i][j];
-			if (tmp == MINE_CELL) {
-				cout << "!  ";
+		for (int j = 0; j <= m_cols; ++j) {
+			if (j == 0) {
+				cout << i << "\t";
+			}
+			else if (i == 0) {
+				cout << j << "  ";
 			}
 			else {
-				cout << tmp << "  ";
+				int tmp = m_grid[i][j];
+				if (tmp == MINE_CELL) {
+					cout << "!  ";
+				}
+				else {
+					cout << tmp << "  ";
+				}
 			}
 		}
 		cout << endl;
@@ -119,7 +127,7 @@ void MineSweeper::print() {
 			else if (m_status[i][j]) {
 				int tmp = m_grid[i][j];
 				if (tmp == MINE_CELL) {
-					cout << "! ";
+					cout << "!  ";
 				}
 				else {
 					cout << tmp << "  ";
@@ -154,20 +162,21 @@ void MineSweeper::shuffle() {
 			counts--;
 		}
 	}
+
 }
 
 void MineSweeper::envValConfig() {
 	for (int i = 1; i <= m_rows; ++i)
 		for (int j = 1; j <= m_cols; ++j) {
 			if (m_grid[i][j]== SAFE_CELL)
-				m_grid[i][j] = round(m_grid,i,j);
+				m_grid[i][j] = round(i,j);
 		}
 }
 
 /*
 	round函数返回制定格子周围一圈内的地雷数量
 */
-inline int MineSweeper::round(vector<vector<int>> & m_grid, int i, int j) {
+inline int MineSweeper::round( int i, int j) {
 	int m_rows = m_grid.size(), m_cols = m_grid[0].size();//行和列
 	int result{ 0 };
 	for (int x = -1; x <= 1; x++)
@@ -200,19 +209,18 @@ void MineSweeper::unfold(int i, int j) {
  如果第一个点开的就是雷，则对其进行一下交换，同时需要重新更新这两个位置四周的计数
 */
 int  MineSweeper::swapMine(int x, int y) {
-	//寻找一个不是雷德cell
+	//寻找一个不是雷的cell
 	while (1) {
 		int i = rand() % m_rows + 1;
 		int j = rand() % m_cols + 1;
-		if (m_grid[i][j] != SAFE_CELL) {
-			int tmp = m_grid[i][j];
-			m_grid[i][j] = m_grid[x][y];
-			m_grid[x][y] = tmp;
+		if (m_grid[i][j] != MINE_CELL) {
+			m_grid[i][j] = m_grid[x][y];//将地雷放入找到的cell位置，
+			m_grid[x][y] = round(x,y);//刷新原位置的数据
 			for (int a = -1; a <= 1; a++)
 				for (int b = -1; b <= 1; b++) {
 					if (a == 0 && b == 0) continue;
-					m_grid[i+a][j+b] +=1;
-					m_grid[x+a][y+b] -=1;
+					m_grid[i+a][j+b] +=(m_grid[i + a][j + b] == MINE_CELL)? 0 : 1;
+					m_grid[x+a][y+b] -= (m_grid[x + a][y + b] == MINE_CELL) ? 0 : 1;
 				}
 			return m_grid[x][y];
 		}
