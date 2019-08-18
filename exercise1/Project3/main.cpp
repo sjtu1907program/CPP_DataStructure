@@ -12,6 +12,7 @@ int main()
 	*/
 	int n{}, m{};
 	scanf_s("%d %d", &n, &m);
+	cout << endl;
 	SweepingBombs* s = new SweepingBombs(n,m);
 	return 0;
 }

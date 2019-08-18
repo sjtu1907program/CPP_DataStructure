@@ -118,39 +118,23 @@ void SweepingBombs::Reveal(int x, int y)
 	int i = x ;
 	int j = y ;
 	if (m_grid[i][j] == 0)
-	{
-		int count{};
-		if ((i - 1) > 0 && (j - 1) > 0 && m_grid[i - 1][j - 1] == -1)
-		{
-			Reveal(i - 1,j - 1 );
-		}
+	{		
+
 		if ((i - 1) > 0 && m_grid[i - 1][j] != -1)
 		{
-			Reveal(i - 1, j );
-		}
-		if ((i - 1) > 0 && (j + 1) < col && m_grid[i - 1][j + 1] == -1)
-		{
-			Reveal(i - 1, j + 1);
+			return Reveal(i - 1, j );
 		}
 		if ((j - 1) > 0 && m_grid[i][j - 1] == -1)
 		{
-			Reveal(i , j - 1);
+			return Reveal(i , j - 1);
 		}
 		if ((j + 1) < col && m_grid[i][j + 1] == -1)
 		{
-			Reveal(i , j + 1);
-		}
-		if ((i + 1) < row && (j - 1) > 0 && m_grid[i + 1][j - 1] == -1)
-		{
-			Reveal(i + 1, j - 1);
+			return Reveal(i , j + 1);
 		}
 		if ((i + 1) < row  && m_grid[i + 1][j] == -1)
 		{
-			Reveal(i + 1, j);
-		}
-		if ((i + 1) < row && (j + 1) < col && m_grid[i + 1][j + 1] == -1)
-		{
-			Reveal(i + 1, j + 1);
+			return Reveal(i + 1, j);
 		}
 	}
 	m_status[i][j] = true;
