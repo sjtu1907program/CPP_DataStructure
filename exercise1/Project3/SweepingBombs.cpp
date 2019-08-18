@@ -145,6 +145,7 @@ void SweepingBombs::GameControl()
 	
 	cout << "Game Over!" << endl;
 	initPrint();
+
 }
 
 SweepingBombs::~SweepingBombs()
