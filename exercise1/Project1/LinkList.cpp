@@ -2,8 +2,13 @@
 #include<iostream>
 using namespace std;
 
+
+
 LinkList::LinkList(int v[], int size) {
 	// v[] = {1, 2, 3,  4, 3}
+	if (!v) {
+		m_head = nullptr; return;
+	}
 	m_head = new ListNode(v[size - 1]);
 	for (int i = size - 2; i >= 0; i--)
 		insert(m_head, v[i]);
@@ -18,6 +23,22 @@ LinkList::~LinkList()
 		delete tmp1;
 	}
 }
+
+//øΩ±¥ππ‘Ï
+LinkList::LinkList(const LinkList& other)
+{
+	m_head = CopyList(other.m_head);
+}
+
+
+LinkList& LinkList::operator=(const LinkList& other)
+{
+	if (this == &other)return *this;
+	DeleteList(other.m_head);
+	m_head=CopyList(other.m_head);
+	return *this;
+}
+
 
 
 int LinkList::size()
@@ -100,4 +121,24 @@ ostream& operator<<(ostream& os, LinkList& list)
 	}
 	os << '}';
 	return os;
+}
+
+
+void LinkList::DeleteList(ListNode* node)
+{
+	if (node == nullptr)return;
+	DeleteList(node->next);
+	delete node;
+	return;
+}
+
+ListNode* LinkList::CopyList(ListNode* other)
+{
+	if (other == nullptr)return nullptr;
+	
+	ListNode* node =new ListNode(other->val);
+
+	node->next=CopyList(other->next);
+	return node;
+
 }

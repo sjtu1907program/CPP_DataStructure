@@ -24,12 +24,18 @@
     <ClCompile Include="LinkList.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SweepingBombs.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix33.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="LinkList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SweepingBombs.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,21 +8,33 @@ struct ListNode {
 
 };
 
-struct LinkList {
+class LinkList {
+
+	friend ostream& operator<<(ostream& os, LinkList& list);
+
+
 public:
 	LinkList(int v[], int size);
+	LinkList(std::initializer_list<int> l);
+	LinkList(const LinkList& other);
+	LinkList& operator=(const LinkList& other);
+	
 	~LinkList();
 
 	int size();
-
 	void erase(int x);
-
 	void insert(ListNode* node, int v);
-
 	// return fist node that has value x 
 	ListNode* find(int x);
+
+private:
+
+	
+	static void DeleteList(ListNode* node);
+	ListNode* CopyList(ListNode* node);
+
+private:
 	ListNode* m_head{ nullptr };
+
 };
 
-
-ostream& operator<<(ostream& os, LinkList& list);
