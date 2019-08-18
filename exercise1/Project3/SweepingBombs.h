@@ -9,8 +9,6 @@ class SweepingBombs {
 
 public:
 	SweepingBombs(int row, int col);
-	void print();
-	void play(int x,int y);
 	~SweepingBombs();
 private:
 	vector<vector<int> > m_grid;
@@ -21,5 +19,8 @@ private:
 	void NumInit();
 	void initPrint();
 	void GameControl();
+	void Reveal(int x, int y);
+	void play(int x, int y);
+	void print();
 };
 
