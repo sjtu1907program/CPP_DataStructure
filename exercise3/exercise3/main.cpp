@@ -19,7 +19,7 @@ void GameInit(SweepingBombs& a) {
 }
 int main(int argc, char* argv[])
 {
-	SweepingBombs a(8,6);
+	SweepingBombs a(8,10);
 	cout << "PleaseEnterTheLevelOfTheGame(EASY:1|NORMAL:2|HARD:3):"<<endl;
 	int temp;
 	cin >> temp;

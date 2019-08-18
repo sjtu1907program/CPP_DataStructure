@@ -36,7 +36,7 @@ void SweepingBombs::ResetLevel(int level) {
 	switch (level)
 	{
 	case DIFFICULT_LEVEL_EASY:
-		density = 0.3f;
+		density = 0.1f;
 		break;
 	case DIFFICULT_LEVEL_NORMAL:
 		density = 0.4f;
@@ -120,12 +120,130 @@ void SweepingBombs::ResetLevel(int level) {
 }
 
 bool SweepingBombs::Play(int x, int y) {
-	*((*(m_status.begin() + y - 1)).begin() + x - 1) = true;
-	if (*((*(m_grid.begin() + y - 1)).begin() + x - 1)==-1) {
-		cout << "youLose";
-		return false;
+	m_status[y - 1][x - 1]=true;
+	//*((*(m_status.begin() + y - 1)).begin() + x - 1) = true;
+	//if (*((*(m_grid.begin() + y - 1)).begin() + x - 1)==-1) {
+	//if (m_grid[y - 1][x - 1] ==-1) {
+	//	cout << "youLose";
+	//	return false;
+	//}
+	//else 
+	if (m_grid[y - 1][x - 1]==0) {
+		FullFillOpen(y - 1, x - 1);
 	}
 	return true;
+}
+
+
+void SweepingBombs::FullFillOpen(int y, int x) {
+	stack<int> fx;
+	stack<int> fy;
+	fx.push(x);
+	fy.push(y);
+	//第一个
+	while (!fx.empty()) {
+		int tempX = fx.top();
+		fx.pop();
+		int tempY = fy.top();
+		fy.pop();
+		int tLeft = FullFillLeft(tempY, tempX);
+		tLeft = tempX - tLeft;
+		int tRight = FullFillRight(tempY, tempX);
+		tRight = tempX + tRight;
+
+		if((tempY - 1)!=-1)
+		{
+			SetNewSeed(fx, fy, tLeft, tRight, tempY - 1);
+		}
+		if ((tempY + 1) < row) {
+			SetNewSeed(fx, fy, tLeft, tRight, tempY + 1);
+		}
+	}
+	for (int i = 0; i < row; i++) {
+		for (int n = 0; n < col; n++) {
+			if (m_grid[i][n] == 0 && m_status[i][n]) {
+				//揭露周围一圈
+				if (i != 0) {
+					m_status[i - 1][n] = true;
+				}
+				if (n != 0) {
+					m_status[i][n - 1] = true;
+				}
+				if (n != 0 && i != 0) {
+					m_status[i - 1][n - 1] = true;
+				}
+				if (i != row - 1) {
+					m_status[i + 1][n] = true;
+				}
+
+				if (n != col - 1) {
+					m_status[i][n + 1] = true;
+				}
+
+				if (n != col - 1 && i != row - 1) {
+					m_status[i + 1][n + 1] = true;
+				}
+
+				if (n != 0 && i != row - 1) {
+					m_status[i + 1][n - 1] = true;
+				}
+				if (n != col - 1 && i != 0) {
+					m_status[i - 1][n + 1] = true;
+				}
+			}
+		}
+	}
+}
+
+void SweepingBombs::SetNewSeed(stack<int> &fx, stack<int> &fy, int tLeft, int tRight, int y) {
+	 int nowX = tLeft;
+	 //y--;
+	bool findNewSeed = false;
+	while (nowX < tRight) {
+		//findNewSeed = false;
+		if ((m_grid[y][nowX] == 0&&m_grid[y][nowX+1] != 0)) {//被分割或到底
+			if (!m_status[y][nowX]) {
+				fy.push(y);
+				fx.push(nowX);
+			}
+		}
+		else {
+
+		}
+
+		nowX++;
+	}
+	if ((m_grid[y][tRight] == 0)) {
+		if (!m_status[y][tRight]) {
+			fy.push(y);
+			fx.push(tRight);
+		}
+	}
+}
+int SweepingBombs::FullFillLeft(int y, int x) {
+	int count = 0;
+	while (x > -1) {
+		if (m_grid[y][x] != 0) {
+			break;
+		}
+		m_status[y][x] = true;
+		count++;
+		x--;
+	}
+	return count-1;
+}
+int SweepingBombs::FullFillRight(int y, int x) {
+	int count = 0;
+	while (x < col) {
+		if (m_grid[y][x] != 0) {
+			break;
+		}
+		m_status[y][x] = true;
+		count++;
+		x++;
+	}
+	return count-1;
+
 }
 
 
