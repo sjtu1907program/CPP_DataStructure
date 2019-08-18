@@ -21,10 +21,7 @@ string templateString(string input)
 {
 	if (input == "")
 		return "";
-	string init;
-	init += input[0];
-	return templateString(input, init);
-	//return templateString(input, "" + input[0]);
+	return templateString(input, input.substr(0, 1));
 }
 
 string templateString(string input, string test)
