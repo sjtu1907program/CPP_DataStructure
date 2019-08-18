@@ -28,7 +28,9 @@ namespace myClassLibrary {
 		DbLinkList(std::initializer_list<int> l);
 		DbLinkList(int v[], int size);
 		DbLinkList(const DbLinkList & dbList);
+		DbLinkList(DbLinkList&& dbList);
 		DbLinkList & operator=(const DbLinkList & dblist);
+		DbLinkList & operator=(DbLinkList && dblist);
 		~DbLinkList();
 
 		DbListNode * head() const { return m_head; }

@@ -54,6 +54,14 @@ namespace myClassLibrary {
 		}
 		m_tail = curNode ;
 	}
+
+	DbLinkList::DbLinkList(DbLinkList && dblist) {
+		m_size = dblist.size();
+		m_head = dblist.m_head;
+		dblist.m_head = nullptr;
+		m_tail = dblist.m_tail;
+		dblist.m_tail = nullptr;
+	}
 	
 	DbLinkList & DbLinkList::operator=(const DbLinkList & dblist) {
 		this->clear();
@@ -71,6 +79,16 @@ namespace myClassLibrary {
 			otherNode = otherNode->GetNext();
 		}
 		m_tail = curNode;
+		return *this;
+	}
+
+	DbLinkList & DbLinkList::operator=(DbLinkList && dblist) {
+		this->clear();
+		m_size = dblist.size();
+		m_head = dblist.m_head;
+		dblist.m_head = nullptr;
+		m_tail = dblist.m_tail;
+		dblist.m_tail = nullptr;
 		return *this;
 	}
 
