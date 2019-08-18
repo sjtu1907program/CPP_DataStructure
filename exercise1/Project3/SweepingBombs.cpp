@@ -113,30 +113,23 @@ void SweepingBombs::play(int x, int y)
 	}
 }
 
-void SweepingBombs::Reveal(int x, int y)
+void SweepingBombs::Reveal(int x, int y, bool bForce)
 {
-	int i = x ;
-	int j = y ;
-	m_status[i][j] = true;
-	if (m_grid[i][j] == 0)
-	{		
-		if ((i - 1) > 0 )
-		{
-			Reveal(i - 1, j);
-		}
-		if ((j - 1) > 0 )
-		{
-			Reveal(i , j - 1);
-		}
-		if ((j + 1) < col )
-		{
-			Reveal(i , j + 1);
-		}
-		if ((i + 1) < row )
-		{
-			Reveal(i + 1, j);
-		}
+	if (x < 0 || y < 0 || x >= row || y >= col)
+		return;
+	if (m_status[x][y] || m_grid[x][y] < 0 )
+		return; 
+
+    if (m_grid[x][y] == 0)
+	{	    
+		    m_status[x][y] = true;	 
+			Reveal(x - 1, y, true);
+			Reveal(x , y - 1, true);
+			Reveal(x , y + 1, true);
+			Reveal(x + 1, y, true);		
 	}
+	else if (bForce)
+		m_status[x][y] = true;
 }
 
 void SweepingBombs::GameControl()

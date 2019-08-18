@@ -19,7 +19,7 @@ private:
 	void NumInit();
 	void initPrint();
 	void GameControl();
-	void Reveal(int x, int y);
+	void Reveal(int x, int y, bool bForce = false );
 	void play(int x, int y);
 	void print();
 };
