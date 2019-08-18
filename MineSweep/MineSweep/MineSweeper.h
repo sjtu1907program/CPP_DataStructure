@@ -10,8 +10,7 @@ enum class Mode {
 class MineSweeper {
 
 public:
-	MineSweeper(int row, int col);
-	MineSweeper(int row, int col , Mode mode);
+	MineSweeper(int row = 8, int col =8, Mode mode = Mode::NORMAL);
 	MineSweeper(int row, int col , int bombs);
 	~MineSweeper(void);
 	/*
@@ -27,17 +26,19 @@ public:
 private :
 	const int SAFE_CELL = 0; //表示安全
 	const int MINE_CELL = 9; //表示地雷
+	vector<vector<int>> m_grid;
+	vector<vector<bool>> m_status;
 	int m_mines{0};			//炸弹计数
 	int m_safeCells{0};			//炸弹计数
 	int m_foundedSafeCounts{0};	//已找到的安全格数量
-	vector<vector<int>> m_grid;
-	vector<vector<bool>> m_status;
+	
 	int m_rows{0};
 	int m_cols{0};
 	bool m_gameover{false};
 
 	void createMap(int row, int col);
 	void shuffle();
+	void knuth_shuffle();
 	void envValConfig();
 	void unfold(int x , int y);
 	inline int round(int i, int j);

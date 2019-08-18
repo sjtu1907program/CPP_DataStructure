@@ -23,8 +23,6 @@ void MineSweeperTest() {
 	GetInput(rows, cols, mode, bombs);
 	cout << endl << rows << "  " << cols << " " << mode << bombs << endl;
 	MineSweeper * ms = nullptr;
-	ms = new MineSweeper(rows, cols, Mode::HARD);
-	ms->print();
 
 	if (mode == 5)
 	{
@@ -46,7 +44,7 @@ void MineSweeperTest() {
 			break;
 		}
 	}
-
+	ms->print();
 	int x, y;
 	cout << "Input x and y:";
 	while (((cin >> x) && (cin >> y))) {

@@ -15,11 +15,8 @@ void MineSweeper::createMap(int _rows, int _cols) {
 	//在实际的雷区外周扩展一圈空白区，方便之后的计算
 }
 
-MineSweeper::MineSweeper(int _rows, int _cols) {
-	new (this)MineSweeper(_rows, _cols, Mode::NORMAL);
-}
 
-MineSweeper::MineSweeper(int _rows, int _cols, Mode mode) {
+MineSweeper::MineSweeper(int _rows = 8, int _cols = 8, Mode mode = Mode::NORMAL) {
 	//雷的数量与地图有关
 	switch (mode) {
 	case Mode::EASY:
@@ -50,7 +47,7 @@ MineSweeper::MineSweeper(int _rows, int _cols, int _mines) {
 	//生成初始地图
 	createMap(m_rows, m_cols);
 	m_foundedSafeCounts = 0;
-	shuffle(); //洗牌，生成随机位置的地雷
+	knuth_shuffle(); //洗牌，生成随机位置的地雷
 	envValConfig();	//根据地雷配置其他cell的内容
 }
 
@@ -138,7 +135,7 @@ void MineSweeper::print() {
 		}
 		cout << endl ;
 	}
-}
+	}
 
 bool MineSweeper::checkOver() {
 	if (m_foundedSafeCounts == m_safeCells) {
@@ -155,7 +152,7 @@ void MineSweeper::shuffle() {
 	int counts = m_mines;
 	srand(time(0));
 	while (counts) {
-		int i = rand() % m_rows +1;
+		int i = rand() / m_cols +1;
 		int j = rand() % m_cols +1;
 		if (m_grid[i][j] == SAFE_CELL) {
 			m_grid[i][j] = MINE_CELL;
@@ -164,6 +161,25 @@ void MineSweeper::shuffle() {
 	}
 
 }
+
+void MineSweeper::knuth_shuffle() {
+	srand(time(0));
+	int counts = m_mines;
+	while (counts) {
+		counts--;
+		m_grid[counts / m_cols + 1][counts%m_cols + 1] = MINE_CELL;
+	}
+
+	//shuffle
+	for (int i = m_rows * m_cols - 1; i > 1; i--) {
+		int randVal = rand() % i;
+		std::swap(m_grid[i/m_cols + 1][i%m_cols + 1] , m_grid[randVal / m_cols + 1][randVal%m_cols + 1]);
+		cout << "swap [" << i / m_cols + 1 << "," << i % m_cols + 1 << "] and [" <<
+			randVal / m_cols + 1 << "," << randVal % m_cols + 1 << "]" << endl;
+		show();
+	}
+}
+
 
 void MineSweeper::envValConfig() {
 	for (int i = 1; i <= m_rows; ++i)
