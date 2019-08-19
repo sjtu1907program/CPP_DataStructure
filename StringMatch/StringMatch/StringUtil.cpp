@@ -1,8 +1,8 @@
 #include "StringUtil.h"
 #include <iostream>
 /*
-	//首先寻找与第一个字符一样的字符，若存在，紧随其后查找第相连字符是否与之相同
-	//若相同，继续进行，直到搜索到达了相同字符串的起始位置，仍保持相同，则满足前两组匹配
+	//首先寻找与第一个字符一样的字符，若存在，查找从此处开始的子字符串中的最小周期字符串，
+	//然后将其与子字符串之前的整体进行对比，若相同，为最小周期字符串，否则，返回其本身
 */
 /*
 	输入：字符串
@@ -12,7 +12,7 @@ std::string StringUtil::GetCyclicSubStr(std::string str)
 {
 	int length = str.length();
 	if (length > 1) {
-		std::string result;//加一个'\0'
+		std::string result;
 		int i = 1;
 		while (i <= (length / 2)) {
 			if (str[0] == str[i])
