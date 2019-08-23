@@ -1,34 +1,34 @@
 #include<iostream>
+#include<string>
 using namespace std;
 
-int ReverseInt(int x);
-//我觉得用longlong好像有点暴力作弊的感觉
-//但如果纯用int来判断是否超过INT_MAX的话要写的步骤好像有点太夸张了，我放弃
-int main()
+bool CheckPattern(string pat,string rest)//判断剩下的部分是否可以由pat循环组成
 {
-	cout << ReverseInt(2)<<endl;
-	cout << ReverseInt(1234)<<endl;
-	cout << ReverseInt(1563847412) << endl;//一个正序小于INT_MAX而逆序略微大于INT_MAX的数
-	cout << ReverseInt(1463847412) << endl;//一个正序小于INT_MAX而逆序略微小于INT_MAX的数
-	system("PAUSE");
-	return 0;
+	if (pat == rest)return true;//递归终点
+	else if (pat == rest.substr(0, pat.length()))//比较第一段是否一样
+		return CheckPattern(pat, rest.substr(pat.length()));//递归比较剩下的一段是否由pat组成
+	else return false;//第一段即不一样，返回false
 }
 
-int ReverseInt(int x)
+string FindPattern(string str)
 {
-	long long ll_x = (long long)x;
-	long long ll_revx = 0;
-	while(ll_x!=0)
+	for (int i = 1; i < str.length() / 2; i++)
 	{
-		ll_revx = ll_revx * 10 + ll_x % 10;
-		ll_x /= 10;
+		if (str[i] == str[0])
+		{
+			if (CheckPattern(str.substr(0, i), str.substr(i)))
+				return str.substr(0, i);
+		}
 	}
-	if (ll_revx > INT_MAX) {
-		cout << "error!";
-		return 0;
-	}
-	else
-		return (int)ll_revx;
+	return str;
+}
 
+int main()
+{
+	string a;
+	cin >> a;
+	cout << FindPattern(a);
 
+	system("pause");
+	return 0;
 }
