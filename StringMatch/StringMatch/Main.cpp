@@ -26,6 +26,10 @@ void CyclicityTest() {
 		"abacaabaca",
 		"abccabcc",
 		"abccd",
+		"aba",
+		"a",
+		"aaca",
+		"qweqweqweqweewqqwe"
 	};
 	for (auto str : testgroup) {
 		cout << "the minimum cyclic substring of \"" << str << "\" is :  " << StringUtil::GetCyclicSubStr(str) << endl;

@@ -15,7 +15,7 @@ std::string StringUtil::GetCyclicSubStr(std::string str)
 		std::string result;
 		int i = 1;
 		while (i <= (length / 2)) {
-			if (str[0] == str[i])
+			if ((length % i == 0) && str[0] == str[i])	//周期串，必然可被子串长度进行整除
 			{
 				result = str.substr(0, i);//[0,i-1]   substr(i) --> [i, end]
 				std::string cyclicStr = GetCyclicSubStr(str.substr(i));//获取从此位置开始的子字符串的周期字符串
