@@ -5,14 +5,14 @@ using namespace std;
 string PatternMatch(string s)
 {
 	int n = s.size();
-	for (int i{ n / 2 }; i > 0; i--)
+	for (int i = 1; i < n/2 + 1; i++)
 	{
 		if (n % i == 0)
 		{
 			int c = n / i;
 			string t{};			
 			string res = s.substr(0, i);
-			for (int j = 0; j < c; ++j)
+			for (int j = 0; j < c; j++)
 			{
 				t += res;	
 			}
