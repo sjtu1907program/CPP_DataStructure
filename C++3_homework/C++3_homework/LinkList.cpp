@@ -3,11 +3,10 @@
 LinkList::LinkList(int v[], int size)
 {
 	// v[] = {1, 2, 3,  4, 3}
-	ListNode *p;
-	p = m_head;
+	shared_ptr<ListNode> p = m_head;
 	for (int i = 0; i < size; i++)
 	{
-		ListNode *s = new ListNode(0);
+		shared_ptr<ListNode> s = make_shared<ListNode>();
 		s->val = v[i];
 		p->next = s;
 		p = s;
@@ -22,7 +21,7 @@ LinkList::~LinkList()
 int LinkList::size()
 {
 	int n = 0;
-	ListNode *p = m_head->next;
+	shared_ptr<ListNode> p = m_head->next;
 
 	while (p != NULL)
 	{
@@ -34,17 +33,14 @@ int LinkList::size()
 
 void LinkList::erase(int x)
 {
-	ListNode *r = m_head;
-	ListNode *p = r->next;
+	shared_ptr<ListNode> r = m_head;
+	shared_ptr<ListNode> p = r->next;
 	while (p != NULL)
 	{
 		if (p->val == x)
 		{
 			r->next = p->next;
-			ListNode *d;
-			d = p;
 			p = p->next;
-			delete d;
 		}
 		else
 		{
@@ -54,9 +50,9 @@ void LinkList::erase(int x)
 	}
 }
 
-void LinkList::insert(ListNode* node, int v)
+void LinkList::insert(shared_ptr<ListNode> node, int v)
 {
-	ListNode *m = new ListNode(0);
+	shared_ptr<ListNode> m = make_shared<ListNode>();
 	m->val = v;
 	if (node == nullptr)
 	{
@@ -70,9 +66,9 @@ void LinkList::insert(ListNode* node, int v)
 	}
 }
 
-ListNode* LinkList::find(int x)
+shared_ptr<ListNode> LinkList::find(int x)
 {
-	ListNode *p = m_head->next;
+	shared_ptr<ListNode> p = m_head->next;
 	while (p != NULL)
 	{
 		if (p->val == x)
@@ -86,7 +82,7 @@ ListNode* LinkList::find(int x)
 
 ostream & operator<<(ostream & os, const LinkList & m)
 {
-	ListNode *p = m.m_head->next;
+	shared_ptr<ListNode> p = m.m_head->next;
 	while (p != NULL)
 	{
 		os << p->val << "  ";

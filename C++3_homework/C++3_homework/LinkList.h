@@ -1,16 +1,18 @@
 #pragma once
 #include<iostream>;
+#include<memory>;
 using namespace std;
 
 struct ListNode {
 	int val;
-	ListNode *next;
-	ListNode(int x) : val(x), next(nullptr) {}
+	shared_ptr<ListNode> next = make_shared<ListNode>();
+	//ListNode(int x) : val(x), next(nullptr) {}
+	ListNode() : val(0), next(nullptr) {}
 };
 
 struct LinkList {
 	int listSize;
-	ListNode * m_head = new ListNode(0);
+	shared_ptr<ListNode> m_head = make_shared<ListNode>();
 
 	LinkList(int v[], int size);
 
@@ -20,10 +22,10 @@ struct LinkList {
 
 	void erase(int x);
 
-	void insert(ListNode* node, int v);
+	void insert(shared_ptr<ListNode> node, int v);
 
 	// return fist node that has value x 
-	ListNode* find(int x);
+	shared_ptr<ListNode> find(int x);
 };
 
 ostream& operator<<(ostream& os, const LinkList& m);
