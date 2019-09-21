@@ -20,12 +20,9 @@ string FindLoopString(string test)
 				break;
 			}
 			result = test.substr(0, i);
-			if (result == test.substr(i, loopLength))
+			if (FindLoopString(test, loopLength))
 			{
-				if (FindLoopString(test.substr(i), loopLength))
-				{
-					return result;
-				}
+				return result;
 			}
 		}
 		i++;
