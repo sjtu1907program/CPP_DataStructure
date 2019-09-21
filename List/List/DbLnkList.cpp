@@ -1,6 +1,184 @@
 #include "DbLnkList.h"
 #include <new>
 
+
+namespace DbList_SmartPoint {
+	using std::make_shared;
+	using std::shared_ptr;
+	DbLinkList::DbLinkList() {
+		m_size = 0;
+		m_head = m_tail = nullptr;
+	}
+
+	DbLinkList::DbLinkList(std::initializer_list<int> l) {
+		m_size = l.size();
+		if (m_size == 0) {
+			m_head = m_tail = nullptr;
+			return;
+		}
+		const int * i = l.begin();
+		m_head = make_shared<DbListNode>(DbListNode(*i++));
+		std::shared_ptr<DbListNode> curNode = m_head;
+		for (; i < l.end(); ++i) {
+			curNode->SetNext(make_shared<DbListNode>(DbListNode(*i, curNode)));
+			curNode = curNode->GetNext();
+		}
+		m_tail = curNode;
+	}
+
+	DbLinkList::DbLinkList(int v[], int size) {
+		m_size = size;
+		if (m_size == 0) {
+			m_head = m_tail = nullptr;
+			return;
+		}
+		m_head = make_shared<DbListNode>(DbListNode(v[0]));
+		std::shared_ptr<DbListNode> curNode = m_head;
+		for (int i = 1; i < m_size; i++) {
+			curNode->SetNext( make_shared<DbListNode>(DbListNode(v[i],curNode)) );
+			curNode = curNode->GetNext();
+		}
+		m_tail = curNode;
+	}
+
+	DbLinkList::DbLinkList(const DbLinkList & dbList) {
+		m_size = dbList.size();
+		if (m_size == 0) {
+			m_head = m_tail = nullptr;
+			return;
+		}
+		m_head =make_shared<DbListNode>(DbListNode(dbList.head()->GetVal())) ;
+		std::shared_ptr<DbListNode> curNode = m_head;
+		std::shared_ptr<DbListNode> otherNode = dbList.head()->GetNext();
+		for (int i = 1; i < m_size; i++) {
+			curNode->SetNext( make_shared<DbListNode>(DbListNode(otherNode->GetVal(), curNode)) );
+			curNode = curNode->GetNext();
+			otherNode = otherNode->GetNext();
+		}
+		m_tail = curNode;
+	}
+
+	DbLinkList::DbLinkList(DbLinkList && dblist) {
+		m_size = dblist.size();
+		m_head = dblist.m_head;
+		dblist.m_head = nullptr;
+		m_tail = dblist.m_tail;
+		dblist.m_tail = nullptr;
+	}
+
+	DbLinkList & DbLinkList::operator=(const DbLinkList & dblist) {
+		this->clear();
+		m_size = dblist.size();
+		if (m_size == 0) {
+			m_head = m_tail = nullptr;
+			return *this;
+		}
+		m_head = make_shared<DbListNode>(DbListNode(dblist.head()->GetVal()));
+		std::shared_ptr<DbListNode> curNode = m_head;
+		std::shared_ptr<DbListNode> otherNode = dblist.head()->GetNext();
+		for (int i = 1; i < m_size; i++) {
+			curNode->SetNext(make_shared<DbListNode>(DbListNode(otherNode->GetVal(), curNode)));
+			curNode = curNode->GetNext();
+			otherNode = otherNode->GetNext();
+		}
+		m_tail = curNode;
+		return *this;
+	}
+
+	DbLinkList & DbLinkList::operator=(DbLinkList && dblist) {
+		this->clear();
+		m_size = dblist.size();
+		m_head = dblist.m_head;
+		dblist.m_head = nullptr;
+		m_tail = dblist.m_tail;
+		dblist.m_tail = nullptr;
+		return *this;
+	}
+
+	DbLinkList::~DbLinkList() {
+		this->clear();
+	}
+
+
+	/*
+		erase the first element that has the value x
+	*/
+	void DbLinkList::erase(int x) {
+		std::cout << "try erasing " << x << "..." << std::endl;
+		std::shared_ptr<DbListNode> curNode = m_head;
+		
+		while (curNode != nullptr && curNode->GetVal() != x)
+			curNode = curNode->GetNext();
+
+		if (curNode != nullptr) {
+			if (!curNode->GetNext()) m_tail = curNode->GetPre();
+			curNode->GetPre()->SetNext(curNode->GetNext());
+			this->m_size -= 1;
+		}
+		else {
+			std::cout << "the list has no the val needed been deleted." << std::endl;
+		}
+	}
+	/*
+		insert the value in the front of the list
+	*/
+	void DbLinkList::insert_front(int v) {
+		m_head->SetPre(make_shared<DbListNode>(DbListNode(v, nullptr, m_head)));
+		m_head = m_head->GetPre();
+		m_size++;
+	}
+
+	/*
+	insert the value in the tail of the list
+	*/
+	void DbLinkList::insert_back(int v) {
+		m_tail->SetNext(make_shared<DbListNode>(DbListNode(v, m_tail)));
+		m_tail = m_tail->GetNext();
+		m_size++;
+	}
+	/*
+	insert a value in the back of node
+	*/
+	void DbLinkList::insert(shared_ptr<DbListNode> node, int v) {
+		std::cout << "try to insert the " << v << " in the behind of " << node->GetVal() << " ..." << std::endl;
+		//DbListNode * tmp = node->next;
+		node->SetNext( make_shared<DbListNode>(DbListNode(v, node, node->GetNext())));
+		m_size++;
+	}
+
+
+	//@return: the first element that has the value x;
+	shared_ptr<DbListNode> DbLinkList::find(int x) {
+		std::shared_ptr<DbListNode> curNode = m_head;
+		while (curNode != nullptr && curNode->GetVal() != x)
+			curNode = curNode->GetNext();
+		return curNode;
+	}
+
+	void DbLinkList::clear() {
+		while (m_head) {
+			std::shared_ptr<DbListNode> cur = m_head;
+			m_head = m_head->GetNext();
+			m_size--;
+		}
+	}
+	std::ostream& operator<<(std::ostream& _cout, DbLinkList& list) {
+
+		std::shared_ptr<DbListNode> cur = list.head();
+		_cout << "size:" << list.size() << ", contents:[";
+		if (cur != nullptr)
+		{
+			_cout << cur->GetVal();
+			while (cur->GetNext() != nullptr) {
+				cur = cur->GetNext();
+				_cout << "," << cur->GetVal();
+			}
+		}
+		_cout << "]";
+		return _cout;
+	}
+}
+
 namespace myClassLibrary {
 	DbLinkList::DbLinkList() {
 		m_size = 0;

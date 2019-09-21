@@ -31,3 +31,4 @@ std::string StringUtil::GetCyclicSubStr(std::string str)
 std::string StringUtil::GetCyclicSubStr(char * str) {
 	return GetCyclicSubStr(std::string(str));
 }
+

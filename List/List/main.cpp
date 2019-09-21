@@ -4,7 +4,8 @@
 #define LENGTHOF(x) (sizeof(x)/sizeof(x[0]))
 
 using namespace std;
-using namespace myClassLibrary;
+using namespace DbList_SmartPoint;
+
 void listTest() {
 	myClassLibrary::DbLinkList testList{ {1,3,5,6,3} };
 	myClassLibrary::DbLinkList another{ testList };
@@ -28,8 +29,8 @@ DbLinkList moveTest() {
 
 
 int main() {
-	DbLinkList listTest = moveTest();
-	cout << "listTest:" << listTest << endl;
-	//listTest();
+	/*DbLinkList listTest = moveTest();
+	cout << "listTest:" << listTest << endl;*/
+	listTest();
 	system("pause");
 }
