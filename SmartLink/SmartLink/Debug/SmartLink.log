@@ -1,0 +1,5 @@
+﻿  LinkList.cpp
+  main.cpp
+  正在生成代码...
+main.obj : error LNK2005: "class std::basic_ostream<char,struct std::char_traits<char> > & __cdecl operator<<(class std::basic_ostream<char,struct std::char_traits<char> > &,class LinkList &)" (??6@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@std@@AAV01@AAVLinkList@@@Z) 已经在 LinkList.obj 中定义
+C:\Users\admin\Desktop\UNITY QUAN\gitCategroy\CPP_DataStructure\SmartLink\Debug\SmartLink.exe : fatal error LNK1169: 找到一个或多个多重定义的符号
