@@ -1,5 +1,6 @@
 #include"LinkList.h"
 using namespace std;
+using namespace TOOL;
 
 
 
@@ -15,8 +16,12 @@ void TestLinkList()
 	auto node = lst.find(2);
 	lst.insert(node, 8);
 	cout << lst << endl;
-	;
 }
+
+
+
+
+
 int main() {
 	TestLinkList();
 	return 0;

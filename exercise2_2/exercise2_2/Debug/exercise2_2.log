@@ -1,0 +1,24 @@
+﻿  LinkList.cpp
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\memory(1801): error C2664: “TOOL::ListNode::ListNode(TOOL::ListNode &&)”: 无法将参数 1 从“_Ty”转换为“int”
+          with
+          [
+              _Ty=nullptr
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\memory(1799): note: 本机 nullptr 只能转换为 bool 或使用 reinterpret_cast 转换为整型
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\memory(1865): note: 参见对正在编译的函数 模板 实例化“std::_Ref_count_obj<_Ty>::_Ref_count_obj<nullptr>(nullptr &&)”的引用
+          with
+          [
+              _Ty=TOOL::ListNode
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\memory(1866): note: 参见对正在编译的函数 模板 实例化“std::_Ref_count_obj<_Ty>::_Ref_count_obj<nullptr>(nullptr &&)”的引用
+          with
+          [
+              _Ty=TOOL::ListNode
+          ]
+  c:\users\nomyu\source\repos\exercise2_2\exercise2_2\linklist.h(27): note: 参见对正在编译的函数 模板 实例化“std::shared_ptr<TOOL::ListNode> std::make_shared<TOOL::ListNode,nullptr>(nullptr &&)”的引用
+  main.cpp
+c:\users\nomyu\source\repos\exercise2_2\exercise2_2\main.cpp(72): error C3867: “complex::real”: 非标准语法；请使用 "&" 来创建指向成员的指针
+c:\users\nomyu\source\repos\exercise2_2\exercise2_2\main.cpp(72): error C2297: “*”: 非法，右操作数包含“double (__thiscall complex::* )(void) const”类型
+c:\users\nomyu\source\repos\exercise2_2\exercise2_2\main.cpp(134): error C3867: “complex::real”: 非标准语法；请使用 "&" 来创建指向成员的指针
+c:\users\nomyu\source\repos\exercise2_2\exercise2_2\main.cpp(134): error C2297: “*”: 非法，右操作数包含“double (__thiscall complex::* )(void) const”类型
+  正在生成代码...
