@@ -1,21 +1,22 @@
 #pragma once
 #include<vector>
 #include<iostream>
+#include<memory>
 
 using namespace std;
 
 class ListNode {
 public:
 	ListNode(const int v) : value(v), next(nullptr) {}
-	ListNode(const int v, ListNode* p) : value(v), next(p) {}
+	ListNode(const int v, shared_ptr<ListNode> p) : value(v), next(p) {}
 	const int getValue() { return value; };
 	void setValue(int v) { value = v; };
-	ListNode* getNext() const { return next; };
-	void setNext(ListNode* where) { next = where; };
+	shared_ptr<ListNode> getNext() const { return next; };
+	void setNext(shared_ptr<ListNode> where) { next = where; };
 	//~Node() { delete next; };
 private:
 	int value;
-	ListNode* next;
+	shared_ptr<ListNode> next;
 };
 
 class LinkList {
@@ -27,7 +28,7 @@ public:
 	LinkList(const LinkList& another);
 	LinkList& operator=(const LinkList& another);
 	int length() const { return size; };
-	bool insert(ListNode* np, int pos);//insert node into pos of the List
+	bool insert(shared_ptr<ListNode> np, int pos);//insert node into pos of the List
 	bool insert(int value, int pos); //insert value into pos of the List
 	int find(int value); //find the first value and get its pos
 	int remove(int value); //remove all the Node s of the value and return the number of Node s removed
@@ -38,6 +39,6 @@ public:
 	//const List& operator=(const List&) = delete;
 	~LinkList();
 private:
-	ListNode* head; //Head of the list.
+	shared_ptr<ListNode> head; //Head of the list.
 	int size; //The current size(length) of the list.
 };

@@ -1,18 +1,30 @@
 #include "LinkList.h"
 
+shared_ptr<ListNode> create_Node(int i)
+{
+	shared_ptr<ListNode> local_ptr(new ListNode(i));
+	return local_ptr;
+}
+
+shared_ptr<ListNode> create_Node(int i, shared_ptr<ListNode> n)
+{
+	shared_ptr<ListNode> local_ptr(new ListNode(i, n));
+	return local_ptr;
+}
+
 LinkList::LinkList(std::initializer_list<int> l)
 	:size(int(l.size())), head(nullptr)
 {
-	ListNode* prev = nullptr;
-	ListNode* now = nullptr;
+	shared_ptr<ListNode> prev = nullptr;
+	shared_ptr<ListNode> now = nullptr;
 	if (size) { //if not empty vector
-		head = new ListNode(*l.begin()); //do the head
+		head = create_Node(*l.begin()); //do the head
 		prev = head; //the first prev is head
 	}
 	auto ite = l.begin();
 	for (int i = 1; i < size; i++) { //do the body
 		ite++;
-		now = new ListNode(*ite); //add the now Node
+		now = create_Node(*ite); //add the now Node
 		prev->setNext(now); //chain now to prev
 		prev = now; //prev pointer points to now
 	}
@@ -21,14 +33,14 @@ LinkList::LinkList(std::initializer_list<int> l)
 LinkList::LinkList(const vector<int>& v) //create a List from a vector
 	: size(int(v.size())), head(nullptr) //default: empty List
 {
-	ListNode* prev = nullptr;
-	ListNode* now = nullptr;
+	shared_ptr<ListNode> prev = nullptr;
+	shared_ptr<ListNode> now = nullptr;
 	if (size) { //if not empty vector
-		head = new ListNode(v[0]); //do the head
+		head = create_Node(v[0]); //do the head
 		prev = head; //the first prev is head
 	}
 	for (int i = 1; i < size; i++) { //do the body
-		now = new ListNode(v[i]); //add the now Node
+		now = create_Node(v[i]); //add the now Node
 		prev->setNext(now); //chain now to prev
 		prev = now; //prev pointer points to now
 	}
@@ -37,14 +49,14 @@ LinkList::LinkList(const vector<int>& v) //create a List from a vector
 LinkList::LinkList(int* array, int array_size) //create a List from an array
 	: size(array_size), head(nullptr) //default: empty List
 {
-	ListNode* prev = nullptr;
-	ListNode* now = nullptr;
+	shared_ptr<ListNode> prev = nullptr;
+	shared_ptr<ListNode> now = nullptr;
 	if (size) { //if not empty array
-		head = new ListNode(*array); //do the head
+		head = create_Node(*array); //do the head
 		prev = head; //the first prev is head
 	}
 	for (int i = 1; i < size; i++) { //do the body
-		now = new ListNode(*(array + i)); //add the now Node
+		now = create_Node(*(array + i)); //add the now Node
 		prev->setNext(now); //chain now to prev 
 		prev = now; //prev pointer points to now
 	}
@@ -56,13 +68,13 @@ LinkList::LinkList(const LinkList& another) {
 		*this = LinkList();
 		return;
 	}
-	ListNode* nowA = another.head; //the headA is the first nowA
-	head = new ListNode(another.head->getValue()); //create a head with the value
-	ListNode* now = nullptr;
-	ListNode* prev = head; //the head is the first prev
+	shared_ptr<ListNode> nowA = another.head; //the headA is the first nowA
+	head = create_Node(another.head->getValue()); //create a head with the value
+	shared_ptr<ListNode> now = nullptr;
+	shared_ptr<ListNode> prev = head; //the head is the first prev
 	nowA = nowA->getNext(); //get the next nowA
 	while (nowA != nullptr) { //until the end of another
-		now = new ListNode(nowA->getValue()); //copy the now Node
+		now = create_Node(nowA->getValue()); //copy the now Node
 		prev->setNext(now); //chain now to prev
 		prev = now; //the next prev is the now now
 		nowA = nowA->getNext(); //get the next nowA
@@ -83,13 +95,13 @@ LinkList & LinkList::operator=(const LinkList & another)
 		*this = LinkList();
 		return *this;
 	}
-	ListNode* nowA = another.head; //the headA is the first nowA
-	head = new ListNode(another.head->getValue()); //create a head with the value
-	ListNode* now = nullptr;
-	ListNode* prev = head; //the head is the first prev
+	shared_ptr<ListNode> nowA = another.head; //the headA is the first nowA
+	head = create_Node(another.head->getValue()); //create a head with the value
+	shared_ptr<ListNode> now = nullptr;
+	shared_ptr<ListNode> prev = head; //the head is the first prev
 	nowA = nowA->getNext(); //get the next nowA
 	while (nowA != nullptr) { //until the end of another
-		now = new ListNode(nowA->getValue()); //copy the now Node
+		now = create_Node(nowA->getValue()); //copy the now Node
 		prev->setNext(now); //chain now to prev
 		prev = now; //the next prev is the now now
 		nowA = nowA->getNext(); //get the next nowA
@@ -103,28 +115,30 @@ LinkList::~LinkList() {
 		return;
 	}
 	size = 0;
-	ListNode* now = head; //the first now is head
+	shared_ptr<ListNode> now = head; //the first now is head
 	if (head) {
 		now = now->getNext();
-		delete head;
+		head.reset();
+		//delete head;
 	}
 	while (now != nullptr) {
-		ListNode* temp = now; //store where now is
+		shared_ptr<ListNode> temp = now; //store where now is
 		now = now->getNext(); //get the next
-		delete temp; //delete the previous now
+		temp.reset();
+		//delete temp; //delete the previous now
 	}
 	head = nullptr;
 }
 
-bool LinkList::insert(ListNode* np, int pos) { //insert value into pos of the List
+bool LinkList::insert(shared_ptr<ListNode> np, int pos) { //insert value into pos of the List
 	if (pos<0 || pos >size || !np) return false; //check if the pos is valid
 	np->setNext(nullptr);
 	if (pos == 0) { //insert at the head
 		head = np; //make np as the new head and chain the previous head to it
 	}
 	else { //insert pos at the middle or the end
-		ListNode* prev = head; //the first prev is the head
-		ListNode* next = nullptr;
+		shared_ptr<ListNode> prev = head; //the first prev is the head
+		shared_ptr<ListNode> next = nullptr;
 		for (int i = 0; i < pos - 1; i++) { //get the prev point to the Node before the pos
 			prev = prev->getNext();
 		}
@@ -138,16 +152,16 @@ bool LinkList::insert(ListNode* np, int pos) { //insert value into pos of the Li
 bool LinkList::insert(int value, int pos) { //insert value into pos of the List
 	if (pos<0 || pos >size) return false; //check if the pos is valid
 	if (pos == 0) { //insert at the head
-		head = new ListNode(value, head); //create a new Node as the new head and chain the previous head to it
+		head = create_Node(value, head); //create a new Node as the new head and chain the previous head to it
 	}
 	else { //insert pos at the middle or the end
-		ListNode* prev = head; //the first prev is the head
-		ListNode* next = nullptr;
+		shared_ptr<ListNode> prev = head; //the first prev is the head
+		shared_ptr<ListNode> next = nullptr;
 		for (int i = 0; i < pos - 1; i++) { //get the prev point to the Node before the pos
 			prev = prev->getNext();
 		}
 		next = prev->getNext(); //get the pos now and let it be the next
-		prev->setNext(new ListNode(value, next)); //create a new Node and chain the prev, it and the next
+		prev->setNext(create_Node(value, next)); //create a new Node and chain the prev, it and the next
 	}
 	size++;
 	return true;
@@ -156,7 +170,7 @@ bool LinkList::insert(int value, int pos) { //insert value into pos of the List
 int LinkList::find(int value) { //find the first value and get its pos
 	if (!size) return -1; //empty List, not found
 	int pos = 0; //store the now pos
-	ListNode* now = head; //the first now is head
+	shared_ptr<ListNode> now = head; //the first now is head
 	for (int i = 0; i < size; i++) { //check the Nodes one by one
 		if (now->getValue() == value) { //find it
 			return pos;
@@ -171,24 +185,25 @@ int LinkList::remove(int value) { //remove all the Node s of the value and retur
 	if (size == 0) { return 0; } // the list is empty
 	int removed = 0;
 	while (head->getValue() == value) {// check the head
-		ListNode* temp = head; //store where the removed Node is
+		shared_ptr<ListNode> temp = head; //store where the removed Node is
 		head = head->getNext(); //get a new head
-		delete temp; //get rid of the removed Node
+		temp.reset();
+		//delete temp; //get rid of the removed Node
 		removed++;
 		if (head == nullptr) { //now the List is empty
 			size -= removed; //set the new size
 			return removed;
 		}
 	}
-	ListNode* prev = head; //the first prev is head
-	ListNode* now = nullptr;
-	ListNode* next = nullptr;
+	shared_ptr<ListNode> prev = head; //the first prev is head
+	shared_ptr<ListNode> now = nullptr;
+	shared_ptr<ListNode> next = nullptr;
 	now = prev->getNext(); // get now
 	while (now != nullptr) { // still not the end
 		if (now->getValue() == value) {
 			next = now->getNext(); // get the next of the next
 			prev->setNext(next); // skip now(chain next to prev)
-			delete now; //get rid of the now Node
+			//delete now; //get rid of the now Node
 			now = next; //the new now is the previous next
 			removed++;
 		}
@@ -205,7 +220,7 @@ bool LinkList::split(int pos, LinkList& new_list) { //split after the Node at th
 		new_list = LinkList(); //new_list is an empty list
 	}
 	else {
-		ListNode* now = head; //the first now is head
+		shared_ptr<ListNode> now = head; //the first now is head
 		for (int i = 0; i < pos; i++) { //get to the pos
 			now = now->getNext();
 		}
@@ -226,14 +241,14 @@ void LinkList::combine(LinkList& append_list) { //add append_list to the end of 
 		*this = append_list; //copy append_list
 		return;
 	}
-	ListNode* prev = head; //the first prev is head
-	ListNode* nowA = append_list.head; //the first nowA is headA
-	ListNode* now = nullptr;
+	shared_ptr<ListNode> prev = head; //the first prev is head
+	shared_ptr<ListNode> nowA = append_list.head; //the first nowA is headA
+	shared_ptr<ListNode> now = nullptr;
 	while (prev->getNext() != nullptr) { //get to the end of the List
 		prev = prev->getNext();
 	}
 	while (nowA != nullptr) { //until end of the append_list
-		now = new ListNode(nowA->getValue()); //copy the Node
+		now = create_Node(nowA->getValue()); //copy the Node
 		prev->setNext(now); //chain now to prev
 		prev = now; //the next prev is the now now
 		nowA = nowA->getNext(); //get the next Node of append_list
@@ -246,7 +261,7 @@ ostream& operator<<(ostream& os, const LinkList& l) {
 		os << endl;
 		return os;
 	}
-	ListNode* now = l.head; //the first now is the head
+	shared_ptr<ListNode> now = l.head; //the first now is the head
 	while ((now->getNext()) != nullptr) { //until the end
 		os << now->getValue() << " <- "; //print the value of the now Node
 		now = now->getNext(); //get the next Node
