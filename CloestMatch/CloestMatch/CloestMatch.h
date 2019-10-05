@@ -60,10 +60,10 @@ void CloestMatch<T>::Match(T targetValue , vector<std::pair<T, T>> & tmp)
 			auto sum = d1 + d2;
 			if (sum > targetValue)
 			{
+				if (dg2_mid >= dg2_end - 1) break;
 				dg2_end = dg2_mid;
-				break;
-			}
-			else 
+				continue;
+			}else
 			{ 
 				if (sum >= lastSum)
 				{
@@ -82,7 +82,8 @@ void CloestMatch<T>::Match(T targetValue , vector<std::pair<T, T>> & tmp)
 				}
 				dg2_start = dg2_mid;
 			}
-			if (dg2_start == dg2_end - 1) break;
+
+			if (dg2_start >= dg2_end - 1) dg2_start++;
 		}
 		dg2_start = 0;
 	}

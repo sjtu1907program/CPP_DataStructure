@@ -27,10 +27,12 @@ int main() {
 void test() {
 	int  data1[]{ 5,4,7,8,1,5,6,7 };	//≈≈–Ú∫Û£∫ 1 4 5 5 6 7 7 8
 	int  data2[]{ 4,5,7,1,3,67 };       //≈≈–Ú∫Û£∫ 1 3 4 5 7 67
-	
+	/*int  data1[]{ 2000,5000,1000,3000 };
+	int  data2[]{ 3000,4000,7000 };*/
+
 	CloestMatch<int> data_group(data1, LENGTH(data1), data2 , LENGTH(data2));
 	std::vector<std::pair<int, int>> result = std::vector<std::pair<int, int>>();
-	data_group.Match(9 ,result);
+	data_group.Match(12 ,result);
 	for (int i = 0; i < result.size(); i++)
 	{
 		std::pair<int, int> p = result[i];
