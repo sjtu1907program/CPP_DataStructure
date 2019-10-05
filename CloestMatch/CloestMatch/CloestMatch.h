@@ -98,6 +98,7 @@ void CloestMatch<T>::Match(T targetValue, vector<std::pair<T, T>> & tmp)
 			auto sum = d1 + d2;
 			if (sum > targetValue)
 			{
+				if (dg2_mid == 0) return ;
 				dg2_end = dg2_mid-1;
 				continue;
 			}
