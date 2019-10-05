@@ -55,6 +55,7 @@ int divide(T a[], int b, int e)
 	std::swap(a[i], a[e]);
 	return i;
 }
+
 //
 //对数组dg[begin,end]进行排序
 //
@@ -69,7 +70,6 @@ void quickSort(T dg[], int begin, int end)
 	}
 }
 
-
 template <typename T>
 void quickSort(T dg[], int length)
 {
@@ -77,12 +77,61 @@ void quickSort(T dg[], int length)
 }
 
 template <typename T>
+void Merge(T a[], int b, int m, int e , int temp[])
+{
+	int i = b;
+	int j = m;
+	int t = b;
+	while (i < m && j < e) {
+		if (a[i] <= a[j]) {
+			temp[t++] = a[i++];
+		}
+		else {
+			temp[t++] = a[j++];
+		}
+	}
+
+	while (i < m) 
+	{
+		temp[t++] = a[i++];
+	}
+
+	while (j < e)
+	{
+		temp[t++] = a[j++];
+	}
+	
+	i = b ;
+	while (i < e) {
+		a[i] = temp[i];
+		i++;
+	}
+}
+
+template <typename T>
+void MergeSort(T dg[], int begin, int end , T temp[])
+{
+	if (end - begin <= 1) return;
+	int middle = (end + begin) / 2;
+	MergeSort(dg, begin, middle , temp);
+	MergeSort(dg, middle, end , temp);
+	Merge<T>(dg, begin , middle, end, temp);
+}
+
+template <typename T>
+void MergeSort(T dg[], int length)
+{
+	T * temp = new T[length];
+	MergeSort<T>(dg, 0, length , temp);
+	delete [] temp;
+}
+template <typename T>
 void CloestMatch<T>::Match(T targetValue, vector<std::pair<T, T>> & tmp)
 {
 
 	//sort 排序
-	quickSort<T>(data_group1, dg1_length);
-	quickSort<T>(data_group2, dg2_length);
+	MergeSort<T>(data_group1, dg1_length);
+	MergeSort<T>(data_group2, dg2_length);
 
 	//二分查找法
 	int dg2_start = 0, dg2_end = dg2_length-1;
