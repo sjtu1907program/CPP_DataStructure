@@ -39,35 +39,72 @@ void insertSort(T dg[], int length)
 }
 
 template <typename T>
-void CloestMatch<T>::Match(T targetValue , vector<std::pair<T, T>> & tmp)
+int divide(T a[], int b, int e)
 {
+	auto pivot = a[e];
+	auto i = b - 1;
+	for (int j = b; j < e; j++)
+	{
+		if (a[j] < pivot)
+		{
+			i++;
+			std::swap(a[i], a[j]);
+		}
+	}
+	i++;
+	std::swap(a[i], a[e]);
+	return i;
+}
+//
+//对数组dg[begin,end]进行排序
+//
+template <typename T>
+void quickSort(T dg[], int begin, int end) 
+{
+	if (begin < end) 
+	{
+		auto p = divide<T>(dg,begin, end);
+		quickSort(dg,begin, p-1);
+		quickSort(dg,p+1, end);
+	}
+}
+
+
+template <typename T>
+void quickSort(T dg[], int length)
+{
+	quickSort<T>(dg,0,length-1);
+}
+
+template <typename T>
+void CloestMatch<T>::Match(T targetValue, vector<std::pair<T, T>> & tmp)
+{
+
 	//sort 排序
-	insertSort<T>(data_group1, dg1_length);
-	insertSort<T>(data_group2, dg2_length);
+	quickSort<T>(data_group1, dg1_length);
+	quickSort<T>(data_group2, dg2_length);
 
 	//二分查找法
-	int dg1_start = 0, dg1_end = dg1_length ;
-	int dg2_start = 0, dg2_end = dg2_length ;
+	int dg2_start = 0, dg2_end = dg2_length-1;
 	int dg2_mid = 0;
 	T lastSum = data_group1[0] + data_group2[0];
-	for (int i = dg1_start; i < dg1_end; i++) 
+	for (int i = 0; i < dg1_length; i++)
 	{
 		auto d1 = data_group1[i];
-		while (dg2_start < dg2_end )
+		while (dg2_start <= dg2_end)
 		{
 			dg2_mid = (dg2_start + dg2_end) / 2;
 			auto d2 = data_group2[dg2_mid];
 			auto sum = d1 + d2;
 			if (sum > targetValue)
 			{
-				if (dg2_mid >= dg2_end - 1) break;
-				dg2_end = dg2_mid;
+				dg2_end = dg2_mid-1;
 				continue;
-			}else
-			{ 
+			}
+			else
+			{
 				if (sum >= lastSum)
 				{
-					//sum > targetValue
 					if (sum > lastSum) tmp.clear();
 					lastSum = sum;
 					tmp.push_back(std::pair<T, T>(d1, d2));
@@ -80,15 +117,66 @@ void CloestMatch<T>::Match(T targetValue , vector<std::pair<T, T>> & tmp)
 						tmp.push_back(std::pair<T, T>(d1, d2));
 					}
 				}
-				dg2_start = dg2_mid;
+				dg2_start = dg2_mid+1;
 			}
-
-			if (dg2_start >= dg2_end - 1) dg2_start++;
 		}
 		dg2_start = 0;
 	}
 
 }
+
+//template <typename T>
+//void CloestMatch<T>::Match(T targetValue , vector<std::pair<T, T>> & tmp)
+//{
+//
+//	//sort 排序
+//	quickSort<T>(data_group1, dg1_length);
+//	quickSort<T>(data_group2, dg2_length);
+//
+//	//二分查找法
+//	int dg1_start = 0, dg1_end = dg1_length ;
+//	int dg2_start = 0, dg2_end = dg2_length ;
+//	int dg2_mid = 0;
+//	T lastSum = data_group1[0] + data_group2[0];
+//	for (int i = dg1_start; i < dg1_end; i++) 
+//	{
+//		auto d1 = data_group1[i];
+//		while (dg2_start < dg2_end )
+//		{
+//			dg2_mid = (dg2_start + dg2_end) / 2;
+//			auto d2 = data_group2[dg2_mid];
+//			auto sum = d1 + d2;
+//			if (sum > targetValue)
+//			{
+//				if (dg2_mid >= dg2_end - 1) break;
+//				dg2_end = dg2_mid;
+//				continue;
+//			}else
+//			{ 
+//				if (sum >= lastSum)
+//				{
+//					//sum > targetValue
+//					if (sum > lastSum) tmp.clear();
+//					lastSum = sum;
+//					tmp.push_back(std::pair<T, T>(d1, d2));
+//					int index = dg2_mid - 1;
+//					while (index >= dg2_start)
+//					{
+//						auto d2 = data_group2[index--];
+//						auto sum = d1 + d2;
+//						if (sum < lastSum) break;
+//						tmp.push_back(std::pair<T, T>(d1, d2));
+//					}
+//				}
+//				dg2_start = dg2_mid;
+//			}
+//
+//			if (dg2_start >= dg2_end - 1) dg2_start++;
+//		}
+//		dg2_start = 0;
+//	}
+//
+//}
 
 //template <typename T>
 //void CloestMatch<T>::Match(T targetValue) {
