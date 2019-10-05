@@ -21,6 +21,9 @@ private:
 	int dg2_length;
 };
 
+//
+//≤Â»Î≈≈–Ú
+//
 template <typename T>
 void insertSort(T dg[], int length)
 {
@@ -38,6 +41,9 @@ void insertSort(T dg[], int length)
 	}
 }
 
+//
+//øÏ≈≈
+//
 template <typename T>
 int divide(T a[], int b, int e)
 {
@@ -76,6 +82,9 @@ void quickSort(T dg[], int length)
 	quickSort<T>(dg,0,length-1);
 }
 
+//
+//πÈ≤¢≈≈–Ú
+//
 template <typename T>
 void Merge(T a[], int b, int m, int e , int temp[])
 {
@@ -125,6 +134,10 @@ void MergeSort(T dg[], int length)
 	MergeSort<T>(dg, 0, length , temp);
 	delete [] temp;
 }
+
+//
+//∆•≈‰À„∑®
+//
 template <typename T>
 void CloestMatch<T>::Match(T targetValue, vector<std::pair<T, T>> & tmp)
 {
